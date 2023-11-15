@@ -19,12 +19,7 @@ import dht11
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 GPIO.cleanup()
-GPIO.setup(pilot_pin, GPIO.OUT)
-GPIO.setup(led_pin, GPIO.OUT)
-for pin in light_pins:
-    GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
-# light_pins = [26, 19, 13, 6, 5]     # 5個の光センサーの状態を取得するラズパイのGPIOピン
 humi_pin = 14
 led_pin = 16
 pilot_pin = 21

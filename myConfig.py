@@ -69,7 +69,7 @@ class Dailylog():
         last_sum = int(last_sum[:-1])                           # 最後の1文字は「分」なので、それを除いて数値化する
         return last_date, last_value, last_sum
     
-    def last_n_data(self, n=5):
+    def last_n_data(self, n=7):
         """
         最後の数行を取得する　n=行数
         """
@@ -77,7 +77,7 @@ class Dailylog():
             str_list = f.readlines()                            # 全テキストを行単位のリストとして読み込む
         last_row = len(str_list)                                # 行数
         start_row = max(0, last_row-n)                          # 表示する最初の行
-        text = "過去5日間の実績<br><br>"
+        text = "過去の実績<br><br>"
         for i in range(start_row, last_row):
             line = str_list[i]
             print(i, line)
