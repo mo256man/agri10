@@ -302,10 +302,10 @@ def getContec():
         dict["light_cnt"] = light_cnt
 
         # 電圧リレーの計算
-        relay1, relay2, _ = volts      # リレー1=青信号（高圧）　リレー2=緑信号（低圧）
-        if relay1:                          # リレー1がオンならば
+        relay1, relay2, _ = volts           # リレー1=緑信号（低圧）　リレー2=青信号（高圧）　
+        if relay2:                          # リレー2がオンならば
             dict["volt"] = "青"             # 「青」
-        elif relay2:                        # リレー1がオフでリレー2がオンならば
+        elif relay1:                        # リレー2がオフでリレー1がオンならば
             dict["volt"] = "緑"             # 「緑」
         else:                               # いずれでもなければ
             dict["volt"] = "黄"             # 「黄」
