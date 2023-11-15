@@ -280,7 +280,7 @@ async function do1st() {
     clearLightMsg();
     showDailyLog();
     //await getBatt(true);
-    await getHumi(true);
+    await getHumi(false);
     await getContec(true, false);
     showLights(lights);
 }
@@ -452,6 +452,7 @@ async function getHumi(isTry) {
         data: {"isTry": isTry},                 // テストか本番かのbool値をisTryとして送る
     }).done(function(data) {
         const dict = JSON.parse(data);
+        console.log(dict);
         if (dict["temp"] != "N/A") {            // センサー値取得できていたら
             temp = dict["temp"];
             humi = dict["humi"];

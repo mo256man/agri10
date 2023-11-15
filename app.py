@@ -49,7 +49,7 @@ def add_log(text, filename):
     with open(filename, mode="a") as f:
         f.write(text + "\n")
 
-# contec = Contec()               # コンテックのクラス
+contec = Contec()               # コンテックのクラス
 config = Config()                   # 設定のクラス
 dailylog = Dailylog()               # 日当たりログのクラス
 
@@ -126,24 +126,26 @@ def getBatt():
 def getHumi():
     if request.method == "POST":
         is_try = request.form["isTry"]
+        print("#"* 60)
         dict = {}
-        if is_try=="true":               # true/falseは文字列として送られてくる
-            dict["temp"] = random.randint(10, 40)
-            dict["humi"] = random.randint(0, 100)
+        if is_try!="true":               # true/falseは文字列として送られてくる
+            for i in range(10):
+                result = humi_sensor.read()
+                if result.is_valid():
+                    dict["temp"] = round(result.temperature, 1) # 温度 小数第一位まで
+                    dict["humi"] = round(result.humidity, 1)    # 湿度 小数第一位まで
+                    break
+                else:
+                    dict["temp"] = "N/A"
+                    dict["humi"] = "N/A"
+                add_log(f"{getTime()}　温度: {dict['temp']}℃　湿度: {dict['humi']}%", "動作ログ.txt")
+                print(f"{getTime()}　温湿度（本番）:{dict}")
+        else:
+            dict["temp"] = "test"
+            dict["humi"] = "test"
             add_log(f"{getTime()}　温度（トライ）: {dict['temp']}", "動作ログ.txt")
             add_log(f"{getTime()}　湿度（トライ）: {dict['humi']}", "動作ログ.txt")
             print(f"{getTime()}　温湿度（トライ）:{dict}")
-        else:
-            result = None
-            # result = humi_sensor.read()
-            if result.is_valid():
-                dict["temp"] = round(result.temperature, 1) # 温度 小数第一位まで
-                dict["humi"] = round(result.humidity, 1)    # 湿度 小数第一位まで
-            else:
-                dict["temp"] = "N/A"
-                dict["humi"] = "N/A"
-            add_log(f"{getTime()}　温度: {dict['temp']}℃　湿度: {dict['humi']}%", "動作ログ.txt")
-            print(f"{getTime()}　温湿度（本番）:{dict}")
         return json.dumps(dict)
 
 """
@@ -190,11 +192,11 @@ def enpowerLED():
         is_On = int(request.form["isOn"])
         if is_On:
             #print("育成LEDオン")
-            # contec.output(True)
+            contec.output(True)
             pass
         else:
             # print("育成LEDオフ")
-            # contec.output(False)
+            contec.output(False)
             pass
         is_On = int(request.form["isOn"])
         if is_On:
@@ -279,8 +281,8 @@ def getContec():
             for _ in range(8):
                 inputs.append(random.choice([1, 0]))
         else:
-            # inputs = contec.input()
-            # print("コンテック　本番", inputs)
+            inputs = contec.input()
+            print("コンテック　本番", inputs)
             pass
 
         # コンテックの結果を光センサーの結果と電圧リレーの結果に分ける
